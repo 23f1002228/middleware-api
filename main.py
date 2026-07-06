@@ -163,7 +163,10 @@ app.add_middleware(RequestContextASGIMiddleware)
 # Configured Scoped CORS Middleware
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["https://app-g8swuy.example.com"],
+    allow_origins=[
+        "https://app-g8swuy.example.com",
+        "https://exam.sanand.workers.dev"
+    ],
     allow_origin_regex=r"https://([a-zA-Z0-9-]+\.)*iitm\.ac\.in",
     allow_credentials=True,
     allow_methods=["GET", "OPTIONS"],

@@ -185,6 +185,20 @@ def main():
             print(f"  [FAIL] IITM preflight failed. Status: {status}, Origin Header: {allow_origin}")
             all_passed = False
 
+        # Test 5c: Scoped CORS - Allowed workers.dev Origin preflight
+        print("Test 5c: CORS Preflight for Allowed workers.dev Origin (https://exam.sanand.workers.dev)")
+        req = urllib.request.Request(f"{BASE_URL}/ping", method="OPTIONS")
+        req.add_header("Origin", "https://exam.sanand.workers.dev")
+        req.add_header("Access-Control-Request-Method", "GET")
+        status, headers, _ = run_test(req)
+        
+        allow_origin = headers.get("Access-Control-Allow-Origin")
+        if status == 200 and allow_origin == "https://exam.sanand.workers.dev":
+            print(f"  [PASS] OPTIONS preflight succeeded for workers.dev: {allow_origin}")
+        else:
+            print(f"  [FAIL] workers.dev preflight failed. Status: {status}, Origin Header: {allow_origin}")
+            all_passed = False
+
         # -------------------------------------------------------------
         # Test 6: Scoped CORS - Disallowed Origin preflight
         # -------------------------------------------------------------
