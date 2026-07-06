@@ -128,8 +128,18 @@ class RequestContextASGIMiddleware:
                             pass
 
                     # Ensure X-Request-ID is present in the response headers (overwrite if already set)
-                    response_headers = [h for h in response_headers if h[0].lower() != b"x-request-id"]
-                    response_headers.append((b"x-request-id", request_id.encode("utf-8")))
+                    
+
+                    filtered_headers = []
+                    for k, v in response_headers:
+                        if k.lower() != b"x-request-id":
+                            filtered_headers.append((k, v))
+
+                    filtered_headers.append(
+                        (b"x-request-id", request_id.encode("utf-8"))
+                    )
+
+                    response_headers = filtered_headers
 
                     # Emit the start and body messages to client
                     await send({
@@ -168,7 +178,7 @@ app.add_middleware(
         "https://exam.sanand.workers.dev"
     ],
     allow_origin_regex=r"https://([a-zA-Z0-9-]+\.)*iitm\.ac\.in",
-    allow_credentials=True,
+    allow_credentials=False,
     allow_methods=["GET", "OPTIONS"],
     allow_headers=["*"],
 )
